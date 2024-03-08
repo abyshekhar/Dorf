@@ -138,7 +138,7 @@ export const webhooks = pgTable("webhooks", {
   updatedAt: timestamp("updated_at").defaultNow(),
   formId: text("form_id").notNull(),
   deleted: boolean("deleted").default(false).notNull(),
-  endpointeger: text("endpointeger").notNull(),
+  endpoint: text("endpoint").notNull(),
   events: json("events"),
   enabled: boolean("enabled").default(true).notNull(),
   secretKey: varchar("secret_key", { length: 256 }).notNull(),
@@ -159,9 +159,9 @@ export const webhookEvents = pgTable("webhook_events", {
   submissionId: text("submission_id").notNull(),
   event: varchar("event", { length: 256 }).notNull(),
   statusCode: integer("status_code"),
-  // status: pgEnum("status", ["attempting", "failed", "success"]).default(
-  //   "attempting"
-  // ),
+  status: text("status",{enum :["attempting", "failed", "success"]}).default(
+    "attempting"
+  ),
   lastAttempt: timestamp("last_attempt"),
   nextAttempt: timestamp("next_attempt"),
   attemptCount: integer("attempt_count").default(0),

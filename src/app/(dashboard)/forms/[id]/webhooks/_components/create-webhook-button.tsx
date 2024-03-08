@@ -43,7 +43,8 @@ export function CreateWebhookButton({ formId }: { formId: string }) {
   })
   const [isLoading, setIsLoading] = useState(false)
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {console.log('webhook',values);
+  
     setIsLoading(true)
     const newWebhook = await createWebhook({ ...values, formId })
     toast({
