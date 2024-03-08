@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { InferModel } from "drizzle-orm"
 
-import { fields } from "@/lib/db/schema"
+import { fields } from "@/lib/db/pg-schema"
 import {
   Sheet,
   SheetContent,

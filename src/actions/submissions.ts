@@ -5,7 +5,7 @@ import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
 
 import { db } from "@/lib/db"
-import { submissions } from "@/lib/db/schema"
+import { submissions } from "@/lib/db/pg-schema"
 import { Event } from "@/lib/events"
 import { generateId } from "@/lib/id"
 import { ratelimit } from "@/lib/ratelimiter"

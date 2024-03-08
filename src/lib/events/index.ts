@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm"
 
 import { db } from "../db"
-import { webhookEvents, webhooks } from "../db/schema"
+import { webhookEvents, webhooks } from "../db/mysql-schema"
 import { generateId } from "../id"
 import { eventArraySchema, EventType } from "./types"
 

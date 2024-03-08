@@ -3,7 +3,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { desc, eq, InferModel } from "drizzle-orm"
 
 import { db } from "@/lib/db"
-import { submissions } from "@/lib/db/schema"
+import { submissions } from "@/lib/db/pg-schema"
 import { DataTable } from "@/components/ui/data-table"
 
 import ExportButton from "./export-button"

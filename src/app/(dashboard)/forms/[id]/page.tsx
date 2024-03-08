@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm"
 import { ExternalLinkIcon } from "lucide-react"
 
 import { db } from "@/lib/db"
-import { forms } from "@/lib/db/schema"
+import { forms } from "@/lib/db/pg-schema"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { DashboardHeader } from "@/components/header"

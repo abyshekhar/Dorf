@@ -2,7 +2,7 @@ import Link from "next/link"
 import { and, eq } from "drizzle-orm"
 
 import { db } from "@/lib/db"
-import { forms, webhooks } from "@/lib/db/schema"
+import { forms, webhooks } from "@/lib/db/pg-schema"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/data-table"

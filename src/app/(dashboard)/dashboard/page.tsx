@@ -2,7 +2,7 @@ import Link from "next/link"
 import { and, eq } from "drizzle-orm"
 
 import { db } from "@/lib/db"
-import { forms } from "@/lib/db/schema"
+import { forms } from "@/lib/db/pg-schema"
 import { getCurrentUser } from "@/lib/session"
 import { buttonVariants } from "@/components/ui/button"
 import { DataTable } from "@/components/ui/data-table"

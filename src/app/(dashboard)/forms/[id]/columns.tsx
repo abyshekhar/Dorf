@@ -14,7 +14,7 @@ import {
 } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
-import { submissions } from "@/lib/db/schema"
+import { submissions } from "@/lib/db/pg-schema"
 import { Button } from "@/components/ui/button"
 import { DataTableColumnHeader } from "@/components/ui/data-column-header"
 import {

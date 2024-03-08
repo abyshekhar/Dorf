@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import { InferModel } from "drizzle-orm"
 
-import { webhookEvents } from "@/lib/db/schema"
+import { webhookEvents } from "@/lib/db/pg-schema"
 import { DataTableColumnHeader } from "@/components/ui/data-column-header"
 import { StatusBadge } from "@/components/ui/status-badge"
 

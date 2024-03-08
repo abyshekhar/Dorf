@@ -3,7 +3,7 @@ import { eq } from "drizzle-orm"
 import { getToken } from "next-auth/jwt"
 
 import { db } from "@/lib/db"
-import { forms, submissions, users } from "@/lib/db/schema"
+import { forms, submissions, users } from "@/lib/db/pg-schema"
 import { convertSubmissionsToCsv } from "@/lib/utils"
 
 export async function GET(

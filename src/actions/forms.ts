@@ -6,7 +6,7 @@ import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
 
 import { db } from "@/lib/db"
-import { forms } from "@/lib/db/schema"
+import { forms } from "@/lib/db/pg-schema"
 import { generateId } from "@/lib/id"
 
 const insertFormSchema = createInsertSchema(forms).pick({

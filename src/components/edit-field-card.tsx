@@ -6,7 +6,7 @@ import { DialogClose } from "@radix-ui/react-dialog"
 import { InferModel } from "drizzle-orm"
 import { MoreVerticalIcon, Trash2 } from "lucide-react"
 
-import { fields } from "@/lib/db/schema"
+import { fields } from "@/lib/db/pg-schema"
 import { Card } from "@/components/ui/card"
 
 import { EditFieldSheet } from "./edit-field-sheet"

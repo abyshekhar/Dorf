@@ -1,28 +1,28 @@
 import { relations } from "drizzle-orm"
 import {
   boolean,
-  int,
+  integer,
   json,
-  mysqlEnum,
-  mysqlTable,
+  pgEnum,
+  pgTable,
   primaryKey,
   text,
   timestamp,
   varchar,
-} from "drizzle-orm/mysql-core"
+} from "drizzle-orm/pg-core"
 import { AdapterAccount } from "next-auth/adapters"
 
-export const users = mysqlTable("users", {
+export const users = pgTable("users", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").onUpdateNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: varchar("image", { length: 255 }),
 })
 
-export const accounts = mysqlTable(
+export const accounts = pgTable(
   "accounts",
   {
     userId: varchar("userId", { length: 255 }).notNull(),
@@ -33,8 +33,8 @@ export const accounts = mysqlTable(
     providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
     refresh_token: varchar("refresh_token", { length: 255 }),
     access_token: varchar("access_token", { length: 255 }),
-    expires_at: int("expires_at"),
-    refresh_token_expires_in: int("refresh_token_expires_in"),
+    expires_at: integer("expires_at"),
+    refresh_token_expires_in: integer("refresh_token_expires_in"),
     token_type: varchar("token_type", { length: 255 }),
     scope: varchar("scope", { length: 255 }),
     id_token: varchar("id_token", { length: 255 }),
@@ -45,13 +45,13 @@ export const accounts = mysqlTable(
   })
 )
 
-export const sessions = mysqlTable("sessions", {
+export const sessions = pgTable("sessions", {
   sessionToken: varchar("sessionToken", { length: 255 }).notNull().primaryKey(),
   userId: varchar("userId", { length: 255 }).notNull(),
   expires: timestamp("expires", { mode: "date" }).notNull(),
 })
 
-export const verificationTokens = mysqlTable(
+export const verificationTokens = pgTable(
   "verificationToken",
   {
     identifier: varchar("identifier", { length: 255 }).notNull(),
@@ -63,10 +63,10 @@ export const verificationTokens = mysqlTable(
   })
 )
 
-export const forms = mysqlTable("forms", {
+export const forms = pgTable("forms", {
   id: varchar("id", { length: 12 }).primaryKey().notNull(),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").onUpdateNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
   title: varchar("title", { length: 256 }).notNull(),
   description: varchar("description", { length: 512 }),
   submitText: varchar("submit_text", { length: 256 }).notNull(),
@@ -84,11 +84,11 @@ export const formsRelations = relations(forms, ({ many, one }) => ({
   }),
 }))
 
-export const fields = mysqlTable("fields", {
+export const fields = pgTable("fields", {
   id: varchar("id", { length: 12 }).primaryKey().notNull(),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").onUpdateNow(),
-  type: mysqlEnum("type", [
+  updatedAt: timestamp("updated_at").defaultNow(),
+  type: text("type",{ enum:[
     "text",
     "checkbox",
     "radio",
@@ -100,12 +100,12 @@ export const fields = mysqlTable("fields", {
     "date",
     "time",
     "tel",
-  ]).notNull(),
+  ]}).notNull(),
   label: varchar("label", { length: 256 }).notNull(),
   placeholder: varchar("placeholder", { length: 256 }),
   required: boolean("required").default(false).notNull(),
   description: varchar("description", { length: 512 }),
-  order: int("order"),
+  order: integer("order"),
   options: varchar("options", { length: 512 }),
   formId: text("form_id").notNull(),
 })
@@ -117,10 +117,10 @@ export const fieldsRelations = relations(fields, ({ one, many }) => ({
   }),
 }))
 
-export const submissions = mysqlTable("submissions", {
+export const submissions = pgTable("submissions", {
   id: varchar("id", { length: 12 }).primaryKey().notNull(),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").onUpdateNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
   formId: text("form_id").notNull(),
   data: json("data"),
 })
@@ -132,13 +132,13 @@ export const submissionsRelations = relations(submissions, ({ one }) => ({
   }),
 }))
 
-export const webhooks = mysqlTable("webhooks", {
+export const webhooks = pgTable("webhooks", {
   id: varchar("id", { length: 12 }).primaryKey().notNull(),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").onUpdateNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
   formId: text("form_id").notNull(),
   deleted: boolean("deleted").default(false).notNull(),
-  endpoint: text("endpoint").notNull(),
+  endpointeger: text("endpointeger").notNull(),
   events: json("events"),
   enabled: boolean("enabled").default(true).notNull(),
   secretKey: varchar("secret_key", { length: 256 }).notNull(),
@@ -152,19 +152,19 @@ export const webhooksRelations = relations(webhooks, ({ one, many }) => ({
   webhookEvents: many(webhookEvents),
 }))
 
-export const webhookEvents = mysqlTable("webhook_events", {
+export const webhookEvents = pgTable("webhook_events", {
   id: varchar("id", { length: 12 }).primaryKey().notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   webhookId: text("webhook_id").notNull(),
   submissionId: text("submission_id").notNull(),
   event: varchar("event", { length: 256 }).notNull(),
-  statusCode: int("status_code"),
-  status: mysqlEnum("status", ["attempting", "failed", "success"]).default(
-    "attempting"
-  ),
+  statusCode: integer("status_code"),
+  // status: pgEnum("status", ["attempting", "failed", "success"]).default(
+  //   "attempting"
+  // ),
   lastAttempt: timestamp("last_attempt"),
   nextAttempt: timestamp("next_attempt"),
-  attemptCount: int("attempt_count").default(0),
+  attemptCount: integer("attempt_count").default(0),
 })
 
 export const webhookEventRelations = relations(webhookEvents, ({ one }) => ({
@@ -178,10 +178,10 @@ export const webhookEventRelations = relations(webhookEvents, ({ one }) => ({
   }),
 }))
 
-export const feedbacks = mysqlTable("feedback", {
+export const feedbacks = pgTable("feedback", {
   id: varchar("id", { length: 12 }).primaryKey().notNull(),
   createdAt: timestamp("created_at").defaultNow(),
-  updatedAt: timestamp("updated_at").onUpdateNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
   text: varchar("text", { length: 512 }).notNull(),
   url: varchar("url", { length: 256 }).notNull(),
   ua: varchar("ua", { length: 256 }).notNull(),
@@ -194,3 +194,5 @@ export const feedbackRelations = relations(feedbacks, ({ one }) => ({
     references: [users.id],
   }),
 }))
+
+

@@ -6,7 +6,7 @@ import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
 
 import { db } from "@/lib/db"
-import { fields } from "@/lib/db/schema"
+import { fields } from "@/lib/db/pg-schema"
 import { generateId } from "@/lib/id"
 
 const insertFieldSchema = createInsertSchema(fields).omit({

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm"
 
 import { db } from "@/lib/db"
-import { forms } from "@/lib/db/schema"
+import { forms } from "@/lib/db/pg-schema"
 
 const getForm = async ({ id }: { id: string }) => {
   const form = await db.query.forms.findFirst({

@@ -4,7 +4,7 @@ import dayjs from "dayjs"
 import { and, eq } from "drizzle-orm"
 
 import { db } from "@/lib/db"
-import { webhooks } from "@/lib/db/schema"
+import { webhooks } from "@/lib/db/pg-schema"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
 import { buttonVariants } from "@/components/ui/button"

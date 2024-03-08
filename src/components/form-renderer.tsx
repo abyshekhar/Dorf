@@ -11,7 +11,7 @@ import { useForm } from "react-hook-form"
 import validator from "validator"
 import { z } from "zod"
 
-import { fields, forms } from "@/lib/db/schema"
+import { fields, forms } from "@/lib/db/pg-schema"
 import { cn } from "@/lib/utils"
 
 import { Icons } from "./icons"

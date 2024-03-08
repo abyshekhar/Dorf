@@ -4,7 +4,8 @@ import { Adapter } from "next-auth/adapters"
 import { generateId } from "@/lib/id"
 
 import { db } from ".."
-import { accounts, sessions, users, verificationTokens } from "../schema"
+// import { accounts, sessions, users, verificationTokens } from "../mysql-schema"
+import { accounts, sessions, users, verificationTokens } from "../pg-schema"
 
 export type DbClient = typeof db
 
@@ -34,7 +35,7 @@ export function PlanetScaleAdapter(
         .select()
         .from(users)
         .where(eq(users.id, id))
-        .then((res) => res[0])
+        .then((res: any[]) => res[0])
     },
     getUser: async (data) => {
       return (
@@ -42,7 +43,7 @@ export function PlanetScaleAdapter(
           .select()
           .from(users)
           .where(eq(users.id, data))
-          .then((res) => res[0]) ?? null
+          .then((res: any[]) => res[0]) ?? null
       )
     },
     getUserByEmail: async (data) => {
@@ -51,7 +52,7 @@ export function PlanetScaleAdapter(
           .select()
           .from(users)
           .where(eq(users.email, data))
-          .then((res) => res[0]) ?? null
+          .then((res: any[]) => res[0]) ?? null
       )
     },
     createSession: async (data) => {
@@ -59,7 +60,7 @@ export function PlanetScaleAdapter(
         .select()
         .from(sessions)
         .where(eq(sessions.sessionToken, data.sessionToken))
-        .then((res) => res[0])
+        .then((res: any[]) => res[0])
     },
     getSessionAndUser: async (data) => {
       return (
@@ -71,7 +72,7 @@ export function PlanetScaleAdapter(
           .from(sessions)
           .where(eq(sessions.sessionToken, data))
           .innerJoin(users, eq(users.id, sessions.userId))
-          .then((res) => res[0]) ?? null
+          .then((res: any[]) => res[0]) ?? null
       )
     },
     updateUser: async (data) => {
@@ -85,7 +86,7 @@ export function PlanetScaleAdapter(
         .select()
         .from(users)
         .where(eq(users.id, data.id))
-        .then((res) => res[0])
+        .then((res: any[]) => res[0])
     },
     updateSession: async (data) => {
       await client
@@ -97,7 +98,7 @@ export function PlanetScaleAdapter(
         .select()
         .from(sessions)
         .where(eq(sessions.sessionToken, data.sessionToken))
-        .then((res) => res[0])
+        .then((res: any[]) => res[0])
     },
     linkAccount: async (rawAccount) => {
       await client.insert(accounts).values(rawAccount)
@@ -113,7 +114,7 @@ export function PlanetScaleAdapter(
           )
         )
         .leftJoin(users, eq(accounts.userId, users.id))
-        .then((res) => res[0])
+        .then((res: any[]) => res[0])
       if (!dbAccount) return null
 
       return dbAccount.users
@@ -130,7 +131,7 @@ export function PlanetScaleAdapter(
         .select()
         .from(verificationTokens)
         .where(eq(verificationTokens.identifier, token.identifier))
-        .then((res) => res[0])
+        .then((res: any[]) => res[0])
     },
     useVerificationToken: async (token) => {
       try {
@@ -144,7 +145,7 @@ export function PlanetScaleAdapter(
                 eq(verificationTokens.token, token.token)
               )
             )
-            .then((res) => res[0])) ?? null
+            .then((res: any[]) => res[0])) ?? null
 
         await client
           .delete(verificationTokens)

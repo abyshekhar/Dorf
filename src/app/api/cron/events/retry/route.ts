@@ -4,7 +4,7 @@ import { and, eq, lte } from "drizzle-orm"
 
 import { env } from "@/env.mjs"
 import { db } from "@/lib/db"
-import { webhookEvents } from "@/lib/db/schema"
+import { webhookEvents } from "@/lib/db/pg-schema"
 import { postToEnpoint } from "@/lib/events"
 import { EventType } from "@/lib/events/types"
 

@@ -6,7 +6,7 @@ import { twMerge } from "tailwind-merge"
 
 import { env } from "@/env.mjs"
 
-import { submissions } from "./db/schema"
+import { submissions } from "./db/pg-schema"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))

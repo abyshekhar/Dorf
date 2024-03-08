@@ -13,7 +13,7 @@ import {
   Trash2,
 } from "lucide-react"
 
-import { webhooks } from "@/lib/db/schema"
+import { webhooks } from "@/lib/db/pg-schema"
 import { cn } from "@/lib/utils"
 import {
   AlertDialog,
@@ -85,7 +85,7 @@ export const columns: ColumnDef<Webhook>[] = [
       return (
         <Link
           href={`/forms/${webhook.formId}/webhooks/${webhook.id}`}
-          className="decoration-muted-foreground truncate underline decoration-dashed underline-offset-4"
+          className="truncate underline decoration-muted-foreground decoration-dashed underline-offset-4"
         >
           {webhook.endpoint}
         </Link>

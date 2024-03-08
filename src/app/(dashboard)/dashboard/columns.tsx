@@ -18,7 +18,7 @@ import {
 } from "lucide-react"
 
 import { siteConfig } from "@/config/site"
-import { fields, forms, submissions } from "@/lib/db/schema"
+import { fields, forms, submissions } from "@/lib/db/pg-schema"
 import { cn } from "@/lib/utils"
 import {
   AlertDialog,
@@ -105,7 +105,7 @@ export const columns: ColumnDef<FormWithFields>[] = [
       return (
         <Link
           href={`/forms/${form.id}`}
-          className="decoration-muted-foreground truncate underline decoration-dashed underline-offset-4"
+          className="truncate underline decoration-muted-foreground decoration-dashed underline-offset-4"
         >
           {form.title}
         </Link>

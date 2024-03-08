@@ -20,7 +20,7 @@ import {
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { fields } from "@/lib/db/schema"
+import { fields } from "@/lib/db/pg-schema"
 
 import { Icons } from "./icons"
 import { Button } from "./ui/button"

@@ -9,7 +9,7 @@ import { siteConfig } from "@/config/site"
 import { db } from "@/lib/db"
 
 import { PlanetScaleAdapter } from "./db/lib/drizzle-adapter"
-import { users } from "./db/schema"
+import { users } from "./db/pg-schema"
 
 const postmarkClient = new Client(env.POSTMARK_API_TOKEN)
 

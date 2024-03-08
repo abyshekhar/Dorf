@@ -6,7 +6,7 @@ import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
 
 import { db } from "@/lib/db"
-import { webhooks } from "@/lib/db/schema"
+import { webhooks } from "@/lib/db/pg-schema"
 import { generateId } from "@/lib/id"
 
 const enableWebhookSchema = createInsertSchema(webhooks).pick({

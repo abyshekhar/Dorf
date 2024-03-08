@@ -9,7 +9,7 @@ import { Form } from "react-hook-form"
 import { useHotkeys } from "react-hotkeys-hook"
 
 import { siteConfig } from "@/config/site"
-import { fields, forms } from "@/lib/db/schema"
+import { fields, forms } from "@/lib/db/pg-schema"
 import { cn } from "@/lib/utils"
 
 import { EditFieldCard } from "./edit-field-card"

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm"
 
 import { db } from "@/lib/db"
-import { forms } from "@/lib/db/schema"
+import { forms } from "@/lib/db/pg-schema"
 import { getCurrentUser } from "@/lib/session"
 import { Editor } from "@/components/editor"
 

@@ -4,7 +4,7 @@ import { createInsertSchema } from "drizzle-zod"
 import { z } from "zod"
 
 import { db } from "@/lib/db"
-import { feedbacks } from "@/lib/db/schema"
+import { feedbacks } from "@/lib/db/pg-schema"
 import { generateId } from "@/lib/id"
 
 const insertFeedbackSchema = createInsertSchema(feedbacks).omit({

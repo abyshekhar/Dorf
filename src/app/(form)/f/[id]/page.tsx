@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm"
 
 import { env } from "@/env.mjs"
 import { db } from "@/lib/db"
-import { forms } from "@/lib/db/schema"
+import { forms } from "@/lib/db/pg-schema"
 import { absoluteUrl } from "@/lib/utils"
 import { Separator } from "@/components/ui/separator"
 import { FormRenderer } from "@/components/form-renderer"
