@@ -1,28 +1,49 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import { addField, updateField } from "@/actions/fields";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { InferModel } from "drizzle-orm";
-import { AtSignIcon, CalendarIcon, CircleDotIcon, ClockIcon, HashIcon, LinkIcon, PhoneIcon, TextIcon, ToggleLeftIcon, TypeIcon, XIcon } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useEffect, useState } from "react"
+import { addField, updateField } from "@/actions/fields"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { InferModel } from "drizzle-orm"
+import {
+  AtSignIcon,
+  CalendarIcon,
+  CircleDotIcon,
+  ClockIcon,
+  HashIcon,
+  LinkIcon,
+  PhoneIcon,
+  TextIcon,
+  ToggleLeftIcon,
+  TypeIcon,
+  XIcon,
+} from "lucide-react"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
 
+import { fields } from "@/lib/db/pg-schema"
 
-
-import { fields } from "@/lib/db/pg-schema";
-
-
-
-import { Icons } from "./icons";
-import { Button } from "./ui/button";
-import { DropdownMenuItem } from "./ui/dropdown-menu";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
-import { Input } from "./ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
-import { Switch } from "./ui/switch";
-import { useToast } from "./ui/use-toast";
-
+import { Icons } from "./icons"
+import { Button } from "./ui/button"
+import { DropdownMenuItem } from "./ui/dropdown-menu"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "./ui/form"
+import { Input } from "./ui/input"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select"
+import { Switch } from "./ui/switch"
+import { useToast } from "./ui/use-toast"
 
 const formSchema = z.object({
   id: z.string().optional(),
@@ -226,7 +247,7 @@ export const EditFieldForm = ({
         {(form.watch("type") === "email" ||
           form.watch("type") === "text" ||
           form.watch("type") === "textarea") && (
-          <>
+          <div className="flex items-stretch justify-between space-x-2">
             <FormField
               control={form.control}
               name={"minlength"}
@@ -261,7 +282,7 @@ export const EditFieldForm = ({
                 </FormItem>
               )}
             />
-          </>
+          </div>
         )}
         {form.watch("type") === "radio" && (
           <FormField
