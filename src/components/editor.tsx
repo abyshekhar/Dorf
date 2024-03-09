@@ -172,7 +172,7 @@ export const Editor = ({
           <Button
             variant={"ghost"}
             className="mx-auto flex"
-            onClick={()=>handleSave({formId:form.id, content:form})}
+            onClick={()=>handleSave({formId:form.id, content:{...form,content:''}})}
           >
             <SaveIcon className={"mr-2 h-4 w-4"} />
             Save
