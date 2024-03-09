@@ -39,7 +39,6 @@ const publishFormSchema = createInsertSchema(forms).pick({
   published: true,
 })
 type PublishForm = z.infer<typeof publishFormSchema>
-
 export async function setFormPublished(values: PublishForm) {
   const form = publishFormSchema.parse(values)
 
@@ -57,6 +56,31 @@ export async function setFormPublished(values: PublishForm) {
 
   return updatedForm
 }
+
+const saveFormSchema = createInsertSchema(forms).pick({
+  id: true,
+  content: true,
+})
+type SaveForm = z.infer<typeof saveFormSchema>
+export async function saveForm(values: SaveForm) {
+  const form = saveFormSchema.parse(values)
+
+  if (!form.id) {
+    throw new Error("Form id is required")
+  }
+
+  await db.update(forms).set(form).where(eq(forms.id, form.id))
+
+  const updatedForm = await db.query.forms.findFirst({
+    where: eq(forms.id, form.id),
+  })
+
+  revalidatePath("/forms")
+
+  return updatedForm
+}
+
+
 
 const archiveFormSchema = createInsertSchema(forms).pick({
   id: true,

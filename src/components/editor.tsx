@@ -1,35 +1,31 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { setFormPublished } from "@/actions/forms"
-import { InferModel } from "drizzle-orm"
-import { CircleIcon, PlusCircleIcon, ShareIcon } from "lucide-react"
-import { User } from "next-auth"
-import { Form } from "react-hook-form"
-import { useHotkeys } from "react-hotkeys-hook"
+import Link from "next/link";
+import { saveForm, setFormPublished } from "@/actions/forms";
+import { InferModel } from "drizzle-orm";
+import { CircleIcon, PlusCircleIcon, SaveIcon, ShareIcon } from "lucide-react";
+import { User } from "next-auth";
+import { Form } from "react-hook-form";
+import { useHotkeys } from "react-hotkeys-hook";
 
-import { siteConfig } from "@/config/site"
-import { fields, forms } from "@/lib/db/pg-schema"
-import { cn } from "@/lib/utils"
 
-import { EditFieldCard } from "./edit-field-card"
-import { EditFieldSheet } from "./edit-field-sheet"
-import { FeedbackButton } from "./feedback-button"
-import { FormRenderer } from "./form-renderer"
-import { Icons } from "./icons"
-import { Button, buttonVariants } from "./ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs"
-import { toast } from "./ui/use-toast"
+
+import { siteConfig } from "@/config/site";
+import { fields, forms } from "@/lib/db/pg-schema";
+import { cn } from "@/lib/utils";
+
+
+
+import { EditFieldCard } from "./edit-field-card";
+import { EditFieldSheet } from "./edit-field-sheet";
+import { FeedbackButton } from "./feedback-button";
+import { FormRenderer } from "./form-renderer";
+import { Icons } from "./icons";
+import { Button, buttonVariants } from "./ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuShortcut, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
+import { toast } from "./ui/use-toast";
+
 
 type Form = InferModel<typeof forms, "select">
 type Field = InferModel<typeof fields, "select">
@@ -71,6 +67,17 @@ export const Editor = ({
   form: FormWithFields
   user: User
 }) => {
+  const handleSave = async({formId,content}) => {
+    console.log(JSON.stringify(form))
+    await saveForm({
+      id: formId,
+      content: JSON.stringify(content),
+    })
+    toast({
+      title: `Form saved`,
+      description: `Form has been saved`,
+    })
+  }
   useHotkeys("mod+c", () => {
     if (!form.published) return
     copyLinkToClipboard({ formId: form.id })
@@ -162,6 +169,14 @@ export const Editor = ({
               Add field
             </Button>
           </EditFieldSheet>
+          <Button
+            variant={"ghost"}
+            className="mx-auto flex"
+            onClick={()=>handleSave({formId:form.id, content:form})}
+          >
+            <SaveIcon className={"mr-2 h-4 w-4"} />
+            Save
+          </Button>
         </TabsContent>
         <TabsContent value="preview">
           <FormRenderer preview form={form} />

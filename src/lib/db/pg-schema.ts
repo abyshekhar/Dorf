@@ -1,16 +1,10 @@
-import { relations } from "drizzle-orm"
-import {
-  boolean,
-  integer,
-  json,
-  pgEnum,
-  pgTable,
-  primaryKey,
-  text,
-  timestamp,
-  varchar,
-} from "drizzle-orm/pg-core"
-import { AdapterAccount } from "next-auth/adapters"
+import { relations } from "drizzle-orm";
+import { boolean, integer, json, pgEnum, pgTable, primaryKey, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import { AdapterAccount } from "next-auth/adapters";
+
+
+
+
 
 export const users = pgTable("users", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
@@ -70,6 +64,7 @@ export const forms = pgTable("forms", {
   title: varchar("title", { length: 256 }).notNull(),
   description: varchar("description", { length: 512 }),
   submitText: varchar("submit_text", { length: 256 }).notNull(),
+  content: varchar("content", { length: 10000 }),
   published: boolean("published").default(false).notNull(),
   archived: boolean("archived").default(false).notNull(),
   userId: varchar("user_id", { length: 255 }),
@@ -194,5 +189,3 @@ export const feedbackRelations = relations(feedbacks, ({ one }) => ({
     references: [users.id],
   }),
 }))
-
-
