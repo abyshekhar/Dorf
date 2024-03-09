@@ -54,6 +54,8 @@ const formSchema = z.object({
   required: z.boolean(),
   formId: z.string(),
   options: z.string().min(1).max(50).array().optional(),
+  maxlength: z.string(),
+  minlength: z.string(),
 })
 
 type Field = InferModel<typeof fields, "select">
@@ -240,6 +242,46 @@ export const EditFieldForm = ({
             </FormItem>
           )}
         />
+        {(form.watch("type") === "email" ||
+          form.watch("type") === "text" ||
+          form.watch("type") === "textarea") && (
+          <>
+            <FormField
+              control={form.control}
+              name={"minlength"}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Minlength</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter the minimum length of the field"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription></FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={"maxlength"}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Maxlength</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Enter the maximum length of the field"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormDescription></FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        )}
         {form.watch("type") === "radio" && (
           <FormField
             control={form.control}
