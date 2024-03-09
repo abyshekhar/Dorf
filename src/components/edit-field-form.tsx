@@ -1,49 +1,28 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { addField, updateField } from "@/actions/fields"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { InferModel } from "drizzle-orm"
-import {
-  AtSignIcon,
-  CalendarIcon,
-  CircleDotIcon,
-  ClockIcon,
-  HashIcon,
-  LinkIcon,
-  PhoneIcon,
-  TextIcon,
-  ToggleLeftIcon,
-  TypeIcon,
-  XIcon,
-} from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { useEffect, useState } from "react";
+import { addField, updateField } from "@/actions/fields";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { InferModel } from "drizzle-orm";
+import { AtSignIcon, CalendarIcon, CircleDotIcon, ClockIcon, HashIcon, LinkIcon, PhoneIcon, TextIcon, ToggleLeftIcon, TypeIcon, XIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { fields } from "@/lib/db/pg-schema"
 
-import { Icons } from "./icons"
-import { Button } from "./ui/button"
-import { DropdownMenuItem } from "./ui/dropdown-menu"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form"
-import { Input } from "./ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select"
-import { Switch } from "./ui/switch"
-import { useToast } from "./ui/use-toast"
+
+import { fields } from "@/lib/db/pg-schema";
+
+
+
+import { Icons } from "./icons";
+import { Button } from "./ui/button";
+import { DropdownMenuItem } from "./ui/dropdown-menu";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { Input } from "./ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Switch } from "./ui/switch";
+import { useToast } from "./ui/use-toast";
+
 
 const formSchema = z.object({
   id: z.string().optional(),
@@ -54,8 +33,8 @@ const formSchema = z.object({
   required: z.boolean(),
   formId: z.string(),
   options: z.string().min(1).max(50).array().optional(),
-  maxlength: z.string(),
-  minlength: z.string(),
+  maxlength: z.coerce.number(),
+  minlength: z.coerce.number(),
 })
 
 type Field = InferModel<typeof fields, "select">
@@ -81,6 +60,8 @@ export const EditFieldForm = ({
       placeholder: fieldData?.placeholder || "",
       required: fieldData?.required || false,
       type: fieldData?.type || undefined,
+      minlength: fieldData?.minlength || undefined,
+      maxlength: fieldData?.maxlength || undefined,
       formId: fieldData?.formId || formId,
       options: fieldData?.options?.length ? fieldData.options.split(",") : [],
     },

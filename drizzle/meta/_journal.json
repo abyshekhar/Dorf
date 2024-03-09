@@ -22,6 +22,13 @@
       "when": 1709961440985,
       "tag": "0002_pink_clint_barton",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1709987722837,
+      "tag": "0003_bouncy_clea",
+      "breakpoints": true
     }
   ]
 }

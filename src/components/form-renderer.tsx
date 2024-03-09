@@ -54,9 +54,9 @@ const fieldTypeSchema = z.enum(fields.type.enumValues)
 type FieldType = z.infer<typeof fieldTypeSchema>
 
 // build validtion schema from form fields using zod. i.e. if field.type === "email" then add z.string().email() to schema. If its required then add .required()
-const generateZodSchema = (fieldType: FieldType, required: boolean) => {
+const generateZodSchema = (field: Field) => {
   let type
-  switch (fieldType) {
+  switch (field.type) {
     case "text":
       type = z.string()
       break
@@ -88,8 +88,19 @@ const generateZodSchema = (fieldType: FieldType, required: boolean) => {
       type = z.string()
   }
 
-  if (!required) {
+  if (!field.required) {
     type = type.optional()
+  } else if (
+    field.type == "text" ||
+    field.type == "textarea" ||
+    field.type == "email"
+  ) {
+    if (field.minlength) {
+      type = type.min(field.minlength)
+    }
+    if (field.maxlength) {
+      type = type.max(field.maxlength)
+    }
   }
 
   return type
@@ -97,7 +108,7 @@ const generateZodSchema = (fieldType: FieldType, required: boolean) => {
 
 const generateFormSchema = (formData: FormWithFields) => {
   const fieldSchemas = formData.fields.map((field) => {
-    let fieldSchema = generateZodSchema(field.type, field.required)
+    let fieldSchema = generateZodSchema(field)
 
     return {
       [field.label]: fieldSchema,
