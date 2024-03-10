@@ -29,6 +29,7 @@ import {
 } from "./ui/form"
 import { Input } from "./ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
 import {
   Select,
   SelectContent,
@@ -58,6 +59,7 @@ const generateZodSchema = (field: Field) => {
   let type
   switch (field.type) {
     case "text":
+    case "password":
       type = z.string()
       break
     case "number":
@@ -243,6 +245,36 @@ export const FormRenderer = ({
                   )}
                 />
               )
+            case "password":
+              return (
+                <FormField
+                  key={fieldItem.id}
+                  control={form.control}
+                  name={fieldItem.label}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{fieldItem.label}</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={fieldItem.placeholder || undefined}
+                          required={fieldItem.required || false}
+                          {...field}
+                          value={field.value as string}
+                          type="password"
+                          icon={"password"}
+                          autoComplete="password"
+                        />
+                      </FormControl>
+                      {fieldItem.description && (
+                        <FormDescription>
+                          {fieldItem.description}
+                        </FormDescription>
+                      )}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )
             case "checkbox":
               return (
                 <FormField
@@ -403,7 +435,7 @@ export const FormRenderer = ({
                 />
               )
 
-            case "radio":
+            case "select":
               return (
                 <FormField
                   key={fieldItem.id}
@@ -431,6 +463,37 @@ export const FormRenderer = ({
                             ))}
                         </SelectContent>
                       </Select>
+                      <FormDescription>{fieldItem.description}</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )
+            case "radio":
+              return (
+                <FormField
+                  key={fieldItem.id}
+                  control={form.control}
+                  name={fieldItem.label}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{fieldItem.label}</FormLabel>
+                      <RadioGroup
+                        onValueChange={field.onChange}
+                        defaultValue={field.value as string}
+                      >
+                        {fieldItem.options?.split(",").map((option, index) => (
+                          <div key={index} className="flex items-center space-x-2">
+                            <FormControl>
+                              <RadioGroupItem key={index} value={option}>
+                                {option}
+                              </RadioGroupItem>
+                            </FormControl>
+
+                            <FormLabel>{option}</FormLabel>
+                          </div>
+                        ))}
+                      </RadioGroup>
                       <FormDescription>{fieldItem.description}</FormDescription>
                       <FormMessage />
                     </FormItem>

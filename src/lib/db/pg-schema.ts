@@ -86,6 +86,7 @@ export const fields = pgTable("fields", {
   type: text("type", {
     enum: [
       "text",
+      "password",
       "checkbox",
       "radio",
       "select",

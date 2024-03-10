@@ -7,9 +7,11 @@ import { InferModel } from "drizzle-orm"
 import {
   AtSignIcon,
   CalendarIcon,
+  ChevronDown,
   CircleDotIcon,
   ClockIcon,
   HashIcon,
+  KeyIcon,
   LinkIcon,
   PhoneIcon,
   TextIcon,
@@ -54,8 +56,8 @@ const formSchema = z.object({
   required: z.boolean(),
   formId: z.string(),
   options: z.string().min(1).max(50).array().optional(),
-  maxlength: z.coerce.number(),
-  minlength: z.coerce.number(),
+  maxlength: z.coerce.number().optional(),
+  minlength: z.coerce.number().optional(),
 })
 
 type Field = InferModel<typeof fields, "select">
@@ -89,7 +91,7 @@ export const EditFieldForm = ({
   })
 
   async function onSubmit(values: Form) {
-    let plainOptions
+        let plainOptions
     if (values.options) {
       plainOptions = values.options.join(",")
     }
@@ -187,6 +189,12 @@ export const EditFieldForm = ({
                       <span>Long answer</span>
                     </div>
                   </SelectItem>
+                  <SelectItem value="password">
+                    <div className="flex items-center">
+                      <KeyIcon className="mr-2 h-4 w-4" />
+                      <span>Password</span>
+                    </div>
+                  </SelectItem>
                   <SelectItem value="number">
                     <div className="flex items-center">
                       <HashIcon className="mr-2 h-4 w-4" />
@@ -233,6 +241,12 @@ export const EditFieldForm = ({
                     <div className="flex items-center">
                       <CircleDotIcon className="mr-2 h-4 w-4" />
                       <span>Single Choice</span>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="select">
+                    <div className="flex items-center">
+                      <ChevronDown className="mr-2 h-4 w-4" />
+                      <span>Dropdown</span>
                     </div>
                   </SelectItem>
                 </SelectContent>
@@ -283,6 +297,28 @@ export const EditFieldForm = ({
               )}
             />
           </div>
+        )}
+        {form.watch("type") === "select" && (
+          <FormField
+            control={form.control}
+            name={"options"}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Options</FormLabel>
+                <FormControl>
+                  <OptionsForm
+                    options={field.value || []}
+                    onChange={field.onChange}
+                  />
+                </FormControl>
+                <FormDescription>
+                  Enter one option per line. The first option will be selected
+                  by default.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         )}
         {form.watch("type") === "radio" && (
           <FormField

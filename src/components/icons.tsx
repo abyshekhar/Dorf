@@ -36,6 +36,7 @@ import {
   Webhook,
   X,
   type Icon as LucideIcon,
+  KeyIcon,
 } from "lucide-react"
 
 export type Icon = LucideIcon
@@ -126,6 +127,7 @@ export const Icons = {
   phone: Phone,
   link: Link,
   calendar: Calendar,
+  password:KeyIcon,
   gitHub: (props: LucideProps) => (
     <svg viewBox="0 0 438.549 438.549" {...props}>
       <path
