@@ -60,6 +60,7 @@
     "drizzle-orm": "^0.30.1",
     "drizzle-zod": "^0.5.1",
     "file-saver": "^2.0.5",
+    "handlebars": "^4.7.8",
     "json2csv": "6.0.0-alpha.2",
     "lucide-react": "^0.224.0",
     "nanoid": "^4.0.2",

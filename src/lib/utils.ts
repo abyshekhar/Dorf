@@ -1,12 +1,18 @@
-import { ClassValue, clsx } from "clsx"
-import { InferModel } from "drizzle-orm"
-import saveAs from "file-saver"
-import { parse } from "json2csv"
-import { twMerge } from "tailwind-merge"
+import { ClassValue, clsx } from "clsx";
+import { InferModel } from "drizzle-orm";
+import saveAs from "file-saver";
+import { parse } from "json2csv";
+import { twMerge } from "tailwind-merge";
 
-import { env } from "@/env.mjs"
 
-import { submissions } from "./db/pg-schema"
+
+import { env } from "@/env.mjs";
+
+
+
+import { submissions } from "./db/pg-schema";
+import { Field } from "@/state/state";
+
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -52,4 +58,21 @@ export const downloadFile = async (url: string, filename: string) => {
   const data = await fetch(url)
   const blob = await data.blob()
   saveAs(blob, filename)
+}
+
+export function getRequiredComponents(fields: Field[]) {
+  let requiredComponents = [""]
+  for (let f of fields) {
+    if (f.type === "string") requiredComponents.push("input")
+    if (f.type === "number") requiredComponents.push("input")
+    if (f.type === "date") requiredComponents.push("date")
+    if (f.type === "boolean") requiredComponents.push("switch")
+    if (f.type === "radio") requiredComponents.push("radio-group")
+    if (f.type === "select") requiredComponents.push("select")
+    if (f.type === "combobox") requiredComponents.push("popover", "command")
+  }
+  requiredComponents = requiredComponents.filter((item, index, array) => {
+    return array.indexOf(item) === index
+  })
+  return requiredComponents
 }
