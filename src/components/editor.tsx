@@ -154,9 +154,10 @@ export const Editor = ({
         </div>
       </div>
       <Tabs defaultValue="editor" className="container max-w-3xl">
-        <TabsList className="mx-auto mb-8 grid w-[400px] grid-cols-2">
+        <TabsList className="mx-auto mb-8 grid w-[400px] grid-cols-3">
           <TabsTrigger value="editor">Editor</TabsTrigger>
           <TabsTrigger value="preview">Preview</TabsTrigger>
+          <TabsTrigger value="code">Code</TabsTrigger>
         </TabsList>
         <TabsContent value="editor" className="mx-auto space-y-4">
           {form.fields.map((fieldItem) => (
@@ -180,6 +181,9 @@ export const Editor = ({
         </TabsContent>
         <TabsContent value="preview">
           <FormRenderer preview form={form} />
+        </TabsContent>
+        <TabsContent value="code">
+          The code of the form would be displayed here
         </TabsContent>
       </Tabs>
     </div>
