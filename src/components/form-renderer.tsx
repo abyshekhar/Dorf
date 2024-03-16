@@ -483,7 +483,10 @@ export const FormRenderer = ({
                         defaultValue={field.value as string}
                       >
                         {fieldItem.options?.split(",").map((option, index) => (
-                          <div key={index} className="flex items-center space-x-2">
+                          <div
+                            key={index}
+                            className="flex items-center space-x-2"
+                          >
                             <FormControl>
                               <RadioGroupItem key={index} value={option}>
                                 {option}
@@ -517,6 +520,34 @@ export const FormRenderer = ({
                           icon="clock"
                           value={field.value as string}
                           type="time"
+                        />
+                      </FormControl>
+                      {fieldItem.description && (
+                        <FormDescription>
+                          {fieldItem.description}
+                        </FormDescription>
+                      )}
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )
+            case "hidden":
+              return (
+                <FormField
+                  key={fieldItem.id}
+                  control={form.control}
+                  name={fieldItem.label}
+                  render={({ field }) => (
+                    <FormItem>
+                      {/* <FormLabel>{fieldItem.label}</FormLabel> */}
+                      <FormControl>
+                        <Input
+                          type="hidden"
+                          placeholder={fieldItem.placeholder || undefined}
+                          required={fieldItem.required || false}
+                          {...field}
+                          value={field.value as string}
                         />
                       </FormControl>
                       {fieldItem.description && (

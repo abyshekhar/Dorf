@@ -59,6 +59,7 @@ export const verificationTokens = pgTable(
 
 export const forms = pgTable("forms", {
   id: varchar("id", { length: 12 }).primaryKey().notNull(),
+  // name: varchar("name", { length: 256 }).notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   title: varchar("title", { length: 256 }).notNull(),
@@ -68,6 +69,11 @@ export const forms = pgTable("forms", {
   published: boolean("published").default(false).notNull(),
   archived: boolean("archived").default(false).notNull(),
   userId: varchar("user_id", { length: 255 }),
+  // db: varchar("db", { length: 255 }).notNull(),
+  // schema: varchar("schema", { length: 255 }).notNull(),
+  // table: varchar("table", { length: 255 }).notNull(),
+  // api: varchar("api", { length: 1000 }).notNull(),
+  // status: varchar("status", { length: 3 }),
 })
 
 export const formsRelations = relations(forms, ({ many, one }) => ({
@@ -97,15 +103,18 @@ export const fields = pgTable("fields", {
       "date",
       "time",
       "tel",
+      "hidden",
     ],
   }).notNull(),
   label: varchar("label", { length: 256 }).notNull(),
+  // name: varchar("name", { length: 256 }).notNull(),
   placeholder: varchar("placeholder", { length: 256 }),
   required: boolean("required").default(false).notNull(),
   description: varchar("description", { length: 512 }),
   order: integer("order"),
   minlength: integer("minlength"),
   maxlength: integer("maxlength"),
+  disableOnEdit: boolean("disableOnEdit").default(false).notNull(),
   options: varchar("options", { length: 512 }),
   formId: text("form_id").notNull(),
 })

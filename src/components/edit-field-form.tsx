@@ -10,6 +10,7 @@ import {
   ChevronDown,
   CircleDotIcon,
   ClockIcon,
+  EyeOff,
   HashIcon,
   KeyIcon,
   LinkIcon,
@@ -58,6 +59,7 @@ const formSchema = z.object({
   options: z.string().min(1).max(50).array().optional(),
   maxlength: z.coerce.number().optional(),
   minlength: z.coerce.number().optional(),
+  disableOnEdit: z.boolean(),
 })
 
 type Field = InferModel<typeof fields, "select">
@@ -91,7 +93,7 @@ export const EditFieldForm = ({
   })
 
   async function onSubmit(values: Form) {
-        let plainOptions
+    let plainOptions
     if (values.options) {
       plainOptions = values.options.join(",")
     }
@@ -249,6 +251,12 @@ export const EditFieldForm = ({
                       <span>Dropdown</span>
                     </div>
                   </SelectItem>
+                  <SelectItem value="hidden">
+                    <div className="flex items-center">
+                      <EyeOff className="mr-2 h-4 w-4" />
+                      <span>Hidden</span>
+                    </div>
+                  </SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription>
@@ -338,6 +346,28 @@ export const EditFieldForm = ({
                   by default.
                 </FormDescription>
                 <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
+        {form.watch("type") != "hidden" && (
+          <FormField
+            control={form.control}
+            name="disableOnEdit"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <FormLabel className="text-base">Disable on edit?</FormLabel>
+                  <FormDescription>
+                    Is this field to be disabled on form edit?
+                  </FormDescription>
+                </div>
+                <FormControl>
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
               </FormItem>
             )}
           />

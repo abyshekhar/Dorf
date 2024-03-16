@@ -1,0 +1,1 @@
+ALTER TABLE "fields" ADD COLUMN "disableOnEdit" boolean DEFAULT false NOT NULL;
