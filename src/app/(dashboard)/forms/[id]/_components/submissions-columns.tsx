@@ -43,6 +43,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { toast } from "@/components/ui/use-toast"
+import { Trash2 } from "lucide-react"
 
 type Submission = InferModel<typeof submissions, "select">
 const deleteSubmission = async ({
@@ -54,7 +55,7 @@ const deleteSubmission = async ({
 }) => {
   await deleteFormSubmission(formId, id)
   toast({
-    title: `Form submission deleted"}`,
+    title: `Form submission deleted`,
     description: `Form submission has been deleted`,
   })
 }
@@ -84,8 +85,8 @@ export const submissionColumns: ColumnDef<Submission> = {
               </Link>
               <DropdownMenuSeparator />
               <AlertDialogTrigger asChild>
-                <DropdownMenuItem>
-                  <DeleteIcon className="mr-2 h-4 w-4" />
+                <DropdownMenuItem className="text-destructive">
+                  <Trash2 className="mr-2 h-4 w-4" />
                   <span>Delete</span>
                 </DropdownMenuItem>
               </AlertDialogTrigger>
@@ -103,7 +104,7 @@ export const submissionColumns: ColumnDef<Submission> = {
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 className={buttonVariants({ variant: "destructive" })}
-                onClick={() => deleteFormSubmission(form.formId, form.id)}
+                onClick={() => deleteSubmission({formId: form.formId,id: form.id})}
               >
                 Delete Submission
               </AlertDialogAction>
