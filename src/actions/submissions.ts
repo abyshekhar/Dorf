@@ -82,7 +82,6 @@ export const createSubmission = async (data: CreateSubmission) => {
     where: eq(forms.id, data.formId),
   })
   const content =JSON.parse(formSchema?.content?formSchema.content:"")
-  console.log(content);
   
   let fieldSchemas =content.fields.map((field) => {
     let fieldSchema = generateZodSchema(field)

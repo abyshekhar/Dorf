@@ -32,6 +32,7 @@ type Field = InferModel<typeof fields, "select">
 
 type FormWithFields = Form & {
   fields: Field[]
+  submissions:any
 }
 
 const setPublishForm = async ({
@@ -68,7 +69,6 @@ export const Editor = ({
   user: User
 }) => {
   const handleSave = async({formId,content}) => {
-    console.log(JSON.stringify(form))
     await saveForm({
       id: formId,
       content: JSON.stringify(content),

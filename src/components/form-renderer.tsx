@@ -89,12 +89,12 @@ const generateZodSchema = (field: Field) => {
     field.type == "textarea" ||
     field.type == "email"
   ) {
-    if (field.minlength) {
-      type = type.min(field.minlength)
-    }
-    if (field.maxlength) {
-      type = type.max(field.maxlength)
-    }
+    // if (field.minlength) {
+    //   type = type.min(field.minlength?field.minlength:0)
+    // }
+    // if (field.maxlength) {
+    //   type = type.max(field.maxlength?field.maxlength:512)
+    // }
   }
 
   return type
@@ -127,18 +127,15 @@ export const FormRenderer = ({
    const submission: any = formData?.submissions
     ? formData.submissions[0]?.data
     : undefined
-  console.log("submission data", submission)
   const formSchema = generateFormSchema(formData)
   const defaultValues = {}
   formData.fields.forEach(
     (field) => (defaultValues[field.label] = submission?  submission[field.label]:undefined)
   )
-  console.log("form schema", formSchema)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues
   })
-  console.log("form data", formData)
  
 
   
@@ -146,7 +143,6 @@ export const FormRenderer = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   async function onSubmit(values: unknown) {
-    console.log("form values", values)
     setIsSubmitting(true)
     if (!preview) {
       if (formData.submissions && formData.submissions[0]?.id) {
@@ -193,7 +189,6 @@ export const FormRenderer = ({
                           required={fieldItem.required || false}
                           {...field}
                           value={
-                            (submission && submission[field.name]) ||
                             (field.value as string)
                           }
                           disabled={submission && fieldItem.disableOnEdit}
@@ -222,10 +217,10 @@ export const FormRenderer = ({
                         <Textarea
                           {...field}
                           value={
-                            (submission && submission[field.name]) ||
                             (field.value as string)
                           }
                           required={fieldItem.required}
+                          disabled={submission && fieldItem.disableOnEdit}
                         />
                       </FormControl>
                       {fieldItem.description && (
@@ -253,9 +248,9 @@ export const FormRenderer = ({
                           required={fieldItem.required || false}
                           {...field}
                           value={
-                            (submission && submission[field.name]) ||
                             (field.value as string)
                           }
+                          disabled={submission && fieldItem.disableOnEdit}
                           type="email"
                           icon={"atSign"}
                           autoComplete="email"
@@ -285,6 +280,7 @@ export const FormRenderer = ({
                           placeholder={fieldItem.placeholder || undefined}
                           required={fieldItem.required || false}
                           {...field}
+                          disabled={submission && fieldItem.disableOnEdit}
                           type="password"
                           icon={"password"}
                           autoComplete="password"
@@ -315,6 +311,7 @@ export const FormRenderer = ({
                           }
                           defaultChecked={(submission && submission[field.name]) ||false}
                           onCheckedChange={field.onChange}
+                          disabled={submission && fieldItem.disableOnEdit}
                         />
                       </FormControl>
                       <div className="space-y-1 leading-none">
@@ -342,9 +339,9 @@ export const FormRenderer = ({
                           {...field}
                           required={fieldItem.required || false}
                           value={
-                            (submission && submission[field.name]) ||
                             (field.value as string)
                           }
+                          disabled={submission && fieldItem.disableOnEdit}
                           icon="hash"
                           type="number"
                         />
@@ -375,9 +372,9 @@ export const FormRenderer = ({
                           {...field}
                           icon="link"
                           value={
-                            (submission && submission[field.name]) ||
                             (field.value as string)
                           }
+                          disabled={submission && fieldItem.disableOnEdit}
                           type="url"
                           autoComplete="url"
                         />
@@ -408,9 +405,9 @@ export const FormRenderer = ({
                           {...field}
                           icon="phone"
                           value={
-                            (submission && submission[field.name]) ||
                             (field.value as string)
                           }
+                          disabled={submission && fieldItem.disableOnEdit}
                           type="tel"
                           autoComplete="tel"
                         />
@@ -486,9 +483,9 @@ export const FormRenderer = ({
                       <Select
                         onValueChange={field.onChange}
                         value={
-                          (submission && submission[field.name]) ||
                           (field.value as string)
                         }
+                          disabled={submission && fieldItem.disableOnEdit}
                       >
                         <FormControl>
                           <SelectTrigger required={fieldItem.required}>
@@ -523,9 +520,9 @@ export const FormRenderer = ({
                       <RadioGroup
                         onValueChange={field.onChange}
                         defaultValue={
-                          (submission && submission[field.name]) ||
                           (field.value as string)
                         }
+                          disabled={submission && fieldItem.disableOnEdit}
                       >
                         {fieldItem.options?.split(",").map((option, index) => (
                           <div
@@ -564,9 +561,9 @@ export const FormRenderer = ({
                           {...field}
                           icon="clock"
                           value={
-                            (submission && submission[field.name]) ||
                             (field.value as string)
                           }
+                          disabled={submission && fieldItem.disableOnEdit}
                           type="time"
                         />
                       </FormControl>
@@ -595,7 +592,6 @@ export const FormRenderer = ({
                           required={fieldItem.required || false}
                           {...field}
                           value={
-                            (submission && submission[field.name]) ||
                             (field.value as string)
                           }
                         />

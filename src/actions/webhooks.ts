@@ -58,7 +58,6 @@ const insertWebhook = createInsertSchema(webhooks).pick({
 type CreateWebhook = z.infer<typeof insertWebhook>
 export async function createWebhook(values: CreateWebhook) {
   const webhook = insertWebhook.parse(values)
-console.log(values);
 
   const whsec = "whsec_" + generateId()
   const id = generateId()
