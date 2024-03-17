@@ -67,7 +67,7 @@ console.log(values);
     ...webhook,
     id: id,
     secretKey: whsec,
-    events: JSON.stringify(["submission.created"]),
+    events: JSON.stringify(["submission.created","submission.updated"]),
   })
 
   const createdWebhook = await db.query.webhooks.findFirst({

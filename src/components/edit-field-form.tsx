@@ -87,6 +87,7 @@ export const EditFieldForm = ({
       type: fieldData?.type || undefined,
       minlength: fieldData?.minlength || undefined,
       maxlength: fieldData?.maxlength || undefined,
+      disableOnEdit:fieldData?.disableOnEdit || false,
       formId: fieldData?.formId || formId,
       options: fieldData?.options?.length ? fieldData.options.split(",") : [],
     },

@@ -1,7 +1,7 @@
 "use server";
 
 import { headers } from "next/headers";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import validator from "validator";
 import { z } from "zod";
@@ -13,6 +13,7 @@ import { forms, submissions } from "@/lib/db/pg-schema";
 import { Event } from "@/lib/events";
 import { generateId } from "@/lib/id";
 import { ratelimit } from "@/lib/ratelimiter";
+import { revalidatePath } from "next/cache";
 
 
 
@@ -120,5 +121,63 @@ export const createSubmission = async (data: CreateSubmission) => {
     formId: submission.formId,
     data: JSON.stringify(submission?.data),
     submissionId: id,
+  })
+}
+
+export async function deleteFormSubmission(id: string,submissionId:string) {
+  await db.delete(submissions).where(eq(submissions.id, submissionId))
+  revalidatePath(`/f/${id}/f/${submissionId}`)
+}
+
+const updateSubmissionSchema = createInsertSchema(submissions).pick({
+  formId: true,
+  id:true,
+  data: true,
+})
+type UpdateSubmission = z.infer<typeof updateSubmissionSchema>
+
+export const updateSubmission = async (data: UpdateSubmission) => {
+  const submission = await db.query.submissions.findFirst({
+    where:and(eq(submissions.formId, data.formId),eq(submissions.id,data.id)),
+  })
+  // const content =JSON.parse(formSchema?.content?formSchema.content:"")
+  // console.log(content);
+  
+  // let fieldSchemas =content.fields.map((field) => {
+  //   let fieldSchema = generateZodSchema(field)
+
+  //   return {
+  //     [field.label]: fieldSchema,
+  //   }
+  // })
+
+  // submissionSchema = z.object({
+  //   // Dynamically generate Zod object schema based on the fields
+  //   ...fieldSchemas.reduce((acc, fieldSchema, index) => {
+  //     return {
+  //       ...acc,
+  //       ...fieldSchema,
+  //     }
+  //   }, {}),
+  // })
+
+  // const validatedData = fieldSchemas.safeParse(data.data)
+  const validatedSubmission = createSubmissionSchema.parse(data)
+  const ip = headers().get("x-forwarded-for")
+
+  const { success } = await ratelimit.limit(ip ?? "anonymous")
+
+  if (!success) {
+    throw new Error("Too many requests")
+  }
+
+  await db.update(submissions).set({ data:data.data}).where(eq(submissions.id,data.id))
+
+  const event = new Event("submission.updated")
+
+  await event.emit({
+    formId: data.formId,
+    data: JSON.stringify(submission?.data),
+    submissionId: data.id,
   })
 }

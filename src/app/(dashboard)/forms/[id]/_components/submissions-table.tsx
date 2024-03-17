@@ -7,6 +7,7 @@ import { submissions } from "@/lib/db/pg-schema"
 import { DataTable } from "@/components/ui/data-table"
 
 import ExportButton from "./export-button"
+import { submissionColumns } from "./submissions-columns"
 
 const getSubmissions = async (formId: string) => {
   const data = await db.query.submissions.findMany({
@@ -49,7 +50,7 @@ export const SubmissionsTable = async ({ formId }: { formId: string }) => {
       },
     ]
 
-    return staticColumns.concat(dynamicColumns)
+    return [...dynamicColumns,submissionColumns]
   }
 
   return (

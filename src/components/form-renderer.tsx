@@ -1,49 +1,41 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { createSubmission } from "@/actions/submissions"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { format } from "date-fns"
-import { InferModel } from "drizzle-orm"
-import { AtSignIcon, CalendarIcon } from "lucide-react"
-import { useForm } from "react-hook-form"
-import validator from "validator"
-import { z } from "zod"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { createSubmission, updateSubmission } from "@/actions/submissions";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { InferModel } from "drizzle-orm";
+import { AtSignIcon, CalendarIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import validator from "validator";
+import { z } from "zod";
 
-import { fields, forms } from "@/lib/db/pg-schema"
-import { cn } from "@/lib/utils"
 
-import { Icons } from "./icons"
-import { Button } from "./ui/button"
-import { Calendar } from "./ui/calendar"
-import { Checkbox } from "./ui/checkbox"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form"
-import { Input } from "./ui/input"
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
-import { RadioGroup, RadioGroupItem } from "./ui/radio-group"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select"
-import { Textarea } from "./ui/textarea"
+
+import { fields, forms, submissions } from "@/lib/db/pg-schema";
+import { cn } from "@/lib/utils";
+
+
+
+import { Icons } from "./icons";
+import { Button } from "./ui/button";
+import { Calendar } from "./ui/calendar";
+import { Checkbox } from "./ui/checkbox";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { Input } from "./ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Textarea } from "./ui/textarea";
+
 
 type Form = InferModel<typeof forms, "select">
 type Field = InferModel<typeof fields, "select">
-
+type Submission = InferModel<typeof submissions>
 type FormWithFields = Form & {
   fields: Field[]
+  submissions: any
 }
 
 interface FormRendererProps {
@@ -132,20 +124,44 @@ export const FormRenderer = ({
   form: formData,
   preview,
 }: FormRendererProps) => {
+   const submission: any = formData?.submissions
+    ? formData.submissions[0]?.data
+    : undefined
+  console.log("submission data", submission)
   const formSchema = generateFormSchema(formData)
+  const defaultValues = {}
+  formData.fields.forEach(
+    (field) => (defaultValues[field.label] = submission?  submission[field.label]:undefined)
+  )
+  console.log("form schema", formSchema)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues
   })
+  console.log("form data", formData)
+ 
+
+  
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   async function onSubmit(values: unknown) {
+    console.log("form values", values)
     setIsSubmitting(true)
     if (!preview) {
-      await createSubmission({
-        formId: formData.id,
-        data: JSON.parse(JSON.stringify(values)),
-      })
+      if (formData.submissions && formData.submissions[0]?.id) {
+        await updateSubmission({
+          id: formData.submissions[0].id,
+          formId: formData.id,
+          data: JSON.parse(JSON.stringify(values)),
+        })
+      } else {
+        await createSubmission({
+          formId: formData.id,
+          data: JSON.parse(JSON.stringify(values)),
+        })
+      }
+
       router.push(`/f/${formData.id}/success`)
       setIsSubmitting(false)
     } else {
@@ -176,7 +192,11 @@ export const FormRenderer = ({
                           placeholder={fieldItem.placeholder || undefined}
                           required={fieldItem.required || false}
                           {...field}
-                          value={field.value as string}
+                          value={
+                            (submission && submission[field.name]) ||
+                            (field.value as string)
+                          }
+                          disabled={submission && fieldItem.disableOnEdit}
                         />
                       </FormControl>
                       {fieldItem.description && (
@@ -201,7 +221,10 @@ export const FormRenderer = ({
                       <FormControl>
                         <Textarea
                           {...field}
-                          value={field.value as string}
+                          value={
+                            (submission && submission[field.name]) ||
+                            (field.value as string)
+                          }
                           required={fieldItem.required}
                         />
                       </FormControl>
@@ -229,7 +252,10 @@ export const FormRenderer = ({
                           placeholder={fieldItem.placeholder || undefined}
                           required={fieldItem.required || false}
                           {...field}
-                          value={field.value as string}
+                          value={
+                            (submission && submission[field.name]) ||
+                            (field.value as string)
+                          }
                           type="email"
                           icon={"atSign"}
                           autoComplete="email"
@@ -259,7 +285,6 @@ export const FormRenderer = ({
                           placeholder={fieldItem.placeholder || undefined}
                           required={fieldItem.required || false}
                           {...field}
-                          value={field.value as string}
                           type="password"
                           icon={"password"}
                           autoComplete="password"
@@ -285,7 +310,10 @@ export const FormRenderer = ({
                     <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 pl-0">
                       <FormControl>
                         <Checkbox
-                          checked={field.value as boolean}
+                          checked={
+                            (field.value as boolean)
+                          }
+                          defaultChecked={(submission && submission[field.name]) ||false}
                           onCheckedChange={field.onChange}
                         />
                       </FormControl>
@@ -313,7 +341,10 @@ export const FormRenderer = ({
                           placeholder={fieldItem.placeholder || undefined}
                           {...field}
                           required={fieldItem.required || false}
-                          value={field.value as string}
+                          value={
+                            (submission && submission[field.name]) ||
+                            (field.value as string)
+                          }
                           icon="hash"
                           type="number"
                         />
@@ -343,7 +374,10 @@ export const FormRenderer = ({
                           required={fieldItem.required || false}
                           {...field}
                           icon="link"
-                          value={field.value as string}
+                          value={
+                            (submission && submission[field.name]) ||
+                            (field.value as string)
+                          }
                           type="url"
                           autoComplete="url"
                         />
@@ -373,7 +407,10 @@ export const FormRenderer = ({
                           required={fieldItem.required || false}
                           {...field}
                           icon="phone"
-                          value={field.value as string}
+                          value={
+                            (submission && submission[field.name]) ||
+                            (field.value as string)
+                          }
                           type="tel"
                           autoComplete="tel"
                         />
@@ -408,7 +445,9 @@ export const FormRenderer = ({
                               )}
                             >
                               <CalendarIcon className="mr-2 h-4 w-4 opacity-50" />
-                              {field.value ? (
+                              {submission && submission[field.name] ? (
+                                format(submission[field.name] as Date, "PPP")
+                              ) : field.value ? (
                                 format(field.value as Date, "PPP")
                               ) : (
                                 <span>Pick a date</span>
@@ -446,7 +485,10 @@ export const FormRenderer = ({
                       <FormLabel>{fieldItem.label}</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value as string}
+                        value={
+                          (submission && submission[field.name]) ||
+                          (field.value as string)
+                        }
                       >
                         <FormControl>
                           <SelectTrigger required={fieldItem.required}>
@@ -480,7 +522,10 @@ export const FormRenderer = ({
                       <FormLabel>{fieldItem.label}</FormLabel>
                       <RadioGroup
                         onValueChange={field.onChange}
-                        defaultValue={field.value as string}
+                        defaultValue={
+                          (submission && submission[field.name]) ||
+                          (field.value as string)
+                        }
                       >
                         {fieldItem.options?.split(",").map((option, index) => (
                           <div
@@ -518,7 +563,10 @@ export const FormRenderer = ({
                           required={fieldItem.required || false}
                           {...field}
                           icon="clock"
-                          value={field.value as string}
+                          value={
+                            (submission && submission[field.name]) ||
+                            (field.value as string)
+                          }
                           type="time"
                         />
                       </FormControl>
@@ -540,14 +588,16 @@ export const FormRenderer = ({
                   name={fieldItem.label}
                   render={({ field }) => (
                     <FormItem>
-                      {/* <FormLabel>{fieldItem.label}</FormLabel> */}
                       <FormControl>
                         <Input
                           type="hidden"
                           placeholder={fieldItem.placeholder || undefined}
                           required={fieldItem.required || false}
                           {...field}
-                          value={field.value as string}
+                          value={
+                            (submission && submission[field.name]) ||
+                            (field.value as string)
+                          }
                         />
                       </FormControl>
                       {fieldItem.description && (

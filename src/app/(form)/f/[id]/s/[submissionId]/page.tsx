@@ -1,29 +1,38 @@
-import { Metadata } from "next"
-import { notFound } from "next/navigation"
-import { eq } from "drizzle-orm"
+import { Metadata } from "next";
+import { notFound } from "next/navigation";
+import { and, eq } from "drizzle-orm";
 
-import { env } from "@/env.mjs"
-import { db } from "@/lib/db"
-import { forms } from "@/lib/db/pg-schema"
-import { absoluteUrl } from "@/lib/utils"
-import { Separator } from "@/components/ui/separator"
-import { FormRenderer } from "@/components/form-renderer"
-import { TypographyH1, TypographyLead } from "@/components/typography"
+
+
+import { env } from "@/env.mjs";
+import { db } from "@/lib/db";
+import { forms, submissions } from "@/lib/db/pg-schema";
+import { absoluteUrl } from "@/lib/utils";
+import { Separator } from "@/components/ui/separator";
+import { FormRenderer } from "@/components/form-renderer";
+import { TypographyH1, TypographyLead } from "@/components/typography";
+
+
+
+
 
 interface FormPageProperties {
   params: {
-    id: string
+    id: string,
+    submissionId:string,
   }
 }
 
-const getForm = async ({ id }: { id: string }) => {
+const getForm = async ({ id,submissionId }: { id: string,submissionId }) => {
   const form = await db.query.forms.findFirst({
     where: eq(forms.id, id),
     with: {
       fields: {
         orderBy: (fields, { asc }) => [asc(fields.createdAt)],
       },
-      // submissions:{}
+      submissions: {
+        where:  eq(submissions.id, submissionId),
+      },
     },
   })
 
@@ -33,7 +42,7 @@ const getForm = async ({ id }: { id: string }) => {
 export async function generateMetadata({
   params,
 }: FormPageProperties): Promise<Metadata> {
-  const form = await getForm({ id: params.id })
+  const form = await getForm({ id: params.id ,submissionId:params.submissionId})
 
   if (!form) {
     return {}
@@ -72,9 +81,9 @@ export async function generateMetadata({
 }
 
 const Form = async ({ params }: FormPageProperties) => {
-  const { id } = params
+  const { id,submissionId } = params
 
-  const form = await getForm({ id })
+  const form = await getForm({ id,submissionId })
 
   if (!form?.published || form.archived) {
     notFound()
@@ -87,7 +96,7 @@ const Form = async ({ params }: FormPageProperties) => {
         <TypographyLead>{form.description}</TypographyLead>
       </div>
       <Separator className="mb-8 mt-4" />
-      <FormRenderer form={{...form,submissions:undefined}} />
+      <FormRenderer form={form} />
     </div>
   )
 }
