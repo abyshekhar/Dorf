@@ -207,7 +207,7 @@ export const columns: ColumnDef<FormWithFields>[] = [
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() =>
-                    copyUrl({ url: `${siteConfig.url}/f/${form.id}` })
+                    copyUrl({ url: `${process.env.NEXT_PUBLIC_APP_URL}/f/${form.id}` })
                   }
                 >
                   <CopyIcon className="mr-2 h-4 w-4" />

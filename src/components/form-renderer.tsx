@@ -105,7 +105,7 @@ const generateFormSchema = (formData: FormWithFields) => {
     let fieldSchema = generateZodSchema(field)
 
     return {
-      [field.label]: fieldSchema,
+      [field.name]: fieldSchema,
     }
   })
 
@@ -130,7 +130,7 @@ export const FormRenderer = ({
   const formSchema = generateFormSchema(formData)
   const defaultValues = {}
   formData.fields.forEach(
-    (field) => (defaultValues[field.label] = submission?  submission[field.label]:undefined)
+    (field) => (defaultValues[field.name] = submission?  submission[field.name]:undefined)
   )
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -142,7 +142,7 @@ export const FormRenderer = ({
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  async function onSubmit(values: unknown) {
+  async function onSubmit(values: unknown) {console.log(values)
     setIsSubmitting(true)
     if (!preview) {
       if (formData.submissions && formData.submissions[0]?.id) {
@@ -179,7 +179,7 @@ export const FormRenderer = ({
                 <FormField
                   key={fieldItem.id}
                   control={form.control}
-                  name={fieldItem.label}
+                  name={fieldItem.name}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{fieldItem.label}</FormLabel>
@@ -209,7 +209,7 @@ export const FormRenderer = ({
                 <FormField
                   key={fieldItem.id}
                   control={form.control}
-                  name={fieldItem.label}
+                  name={fieldItem.name}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{fieldItem.label}</FormLabel>
@@ -238,7 +238,7 @@ export const FormRenderer = ({
                 <FormField
                   key={fieldItem.id}
                   control={form.control}
-                  name={fieldItem.label}
+                  name={fieldItem.name}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{fieldItem.label}</FormLabel>
@@ -271,7 +271,7 @@ export const FormRenderer = ({
                 <FormField
                   key={fieldItem.id}
                   control={form.control}
-                  name={fieldItem.label}
+                  name={fieldItem.name}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{fieldItem.label}</FormLabel>
@@ -301,7 +301,7 @@ export const FormRenderer = ({
                 <FormField
                   key={fieldItem.id}
                   control={form.control}
-                  name={fieldItem.label}
+                  name={fieldItem.name}
                   render={({ field }) => (
                     <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 pl-0">
                       <FormControl>
@@ -329,7 +329,7 @@ export const FormRenderer = ({
                 <FormField
                   key={fieldItem.id}
                   control={form.control}
-                  name={fieldItem.label}
+                  name={fieldItem.name}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{fieldItem.label}</FormLabel>
@@ -361,7 +361,7 @@ export const FormRenderer = ({
                 <FormField
                   key={fieldItem.id}
                   control={form.control}
-                  name={fieldItem.label}
+                  name={fieldItem.name}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{fieldItem.label}</FormLabel>
@@ -394,7 +394,7 @@ export const FormRenderer = ({
                 <FormField
                   key={fieldItem.id}
                   control={form.control}
-                  name={fieldItem.label}
+                  name={fieldItem.name}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{fieldItem.label}</FormLabel>
@@ -427,7 +427,7 @@ export const FormRenderer = ({
                 <FormField
                   key={fieldItem.id}
                   control={form.control}
-                  name={fieldItem.label}
+                  name={fieldItem.name}
                   render={({ field }) => (
                     <FormItem className="flex flex-col">
                       <FormLabel>{fieldItem.label}</FormLabel>
@@ -476,7 +476,7 @@ export const FormRenderer = ({
                 <FormField
                   key={fieldItem.id}
                   control={form.control}
-                  name={fieldItem.label}
+                  name={fieldItem.name}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{fieldItem.label}</FormLabel>
@@ -513,7 +513,7 @@ export const FormRenderer = ({
                 <FormField
                   key={fieldItem.id}
                   control={form.control}
-                  name={fieldItem.label}
+                  name={fieldItem.name}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{fieldItem.label}</FormLabel>
@@ -550,7 +550,7 @@ export const FormRenderer = ({
                 <FormField
                   key={fieldItem.id}
                   control={form.control}
-                  name={fieldItem.label}
+                  name={fieldItem.name}
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{fieldItem.label}</FormLabel>
@@ -582,7 +582,7 @@ export const FormRenderer = ({
                 <FormField
                   key={fieldItem.id}
                   control={form.control}
-                  name={fieldItem.label}
+                  name={fieldItem.name}
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>

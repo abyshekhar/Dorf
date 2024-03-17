@@ -10,7 +10,7 @@ const FormSuccess = async ({ params }: { params: { id: string } }) => {
       <div className="space-y-8 text-center">
         <TypographyH1>Success</TypographyH1>
         <TypographyLead>Form submitted successfully</TypographyLead>
-        <Link href="/" className={buttonVariants({ variant: "ghost" })}>
+        <Link href="/forms" className={buttonVariants({ variant: "ghost" })}>
           Start building your own <ArrowRight className="ml-2 h-4 w-4" />
         </Link>
       </div>
