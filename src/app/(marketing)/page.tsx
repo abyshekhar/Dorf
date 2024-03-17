@@ -28,7 +28,7 @@ export default async function IndexPage() {
             <span>Made Simple</span>
           </h1>
           <p className="text-muted-foreground max-w-[42rem] leading-normal sm:text-xl sm:leading-8">
-            Dorf is a free, open source visual form builder for capturing
+            NxForms is a visual form builder for capturing
             feedback, leads, and opinions.
           </p>
           <div className="flex flex-col gap-2 md:flex-row">
@@ -55,7 +55,7 @@ export default async function IndexPage() {
             Proudly Open Source
           </h2>
           <p className="text-muted-foreground max-w-[85%] leading-normal sm:text-lg sm:leading-7">
-            Dorf is open source and powered by open source software. <br /> The
+            NxForms is powered by open source software. <br /> The
             code is available on{" "}
             <Link
               href={siteConfig.links.github}

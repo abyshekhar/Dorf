@@ -38,7 +38,7 @@ export async function GET(req: Request) {
         >
           <div tw="flex flex-col flex-1 items-center w-full">
             <img
-              alt={`${heading} | Dorf forms`}
+              alt={`${heading} | NxForms`}
               src={logoData}
               tw="h-12 mb-16"
             />
