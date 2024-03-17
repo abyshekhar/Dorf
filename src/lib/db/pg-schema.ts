@@ -107,7 +107,7 @@ export const fields = pgTable("fields", {
     ],
   }).notNull(),
   label: varchar("label", { length: 256 }).notNull(),
-  // name: varchar("name", { length: 256 }).notNull(),
+  name: varchar("name", { length: 256 }).notNull(),
   placeholder: varchar("placeholder", { length: 256 }),
   required: boolean("required").default(false).notNull(),
   description: varchar("description", { length: 512 }),

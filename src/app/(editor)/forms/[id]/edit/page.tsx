@@ -28,7 +28,7 @@ const EditForm = async ({ params: { id } }: { params: { id: string } }) => {
 
   if (!user) return null
 
-  return <Editor form={form} user={user} />
+  return <Editor form={{...form,submissions:undefined}} user={user} />
 }
 
 export default EditForm

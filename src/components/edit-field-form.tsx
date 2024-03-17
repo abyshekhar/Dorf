@@ -1,55 +1,39 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { addField, updateField } from "@/actions/fields"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { InferModel } from "drizzle-orm"
-import {
-  AtSignIcon,
-  CalendarIcon,
-  ChevronDown,
-  CircleDotIcon,
-  ClockIcon,
-  EyeOff,
-  HashIcon,
-  KeyIcon,
-  LinkIcon,
-  PhoneIcon,
-  TextIcon,
-  ToggleLeftIcon,
-  TypeIcon,
-  XIcon,
-} from "lucide-react"
-import { useForm } from "react-hook-form"
-import { z } from "zod"
+import { useEffect, useState } from "react";
+import { addField, updateField } from "@/actions/fields";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { InferModel } from "drizzle-orm";
+import { AtSignIcon, CalendarIcon, ChevronDown, CircleDotIcon, ClockIcon, EyeOff, HashIcon, KeyIcon, LinkIcon, PhoneIcon, TextIcon, ToggleLeftIcon, TypeIcon, XIcon } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { fields } from "@/lib/db/pg-schema"
 
-import { Icons } from "./icons"
-import { Button } from "./ui/button"
-import { DropdownMenuItem } from "./ui/dropdown-menu"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form"
-import { Input } from "./ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select"
-import { Switch } from "./ui/switch"
-import { useToast } from "./ui/use-toast"
+
+import { fields } from "@/lib/db/pg-schema";
+
+
+
+import { Icons } from "./icons";
+import { Button } from "./ui/button";
+import { DropdownMenuItem } from "./ui/dropdown-menu";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { Input } from "./ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
+import { Switch } from "./ui/switch";
+import { useToast } from "./ui/use-toast";
+
 
 const formSchema = z.object({
   id: z.string().optional(),
+  name: z
+    .string()
+    .min(2)
+    .max(256)
+    .regex(
+      /^[a-zA-Z][a-zA-Z0-9_]*$/,
+      "Column name must start with a letter and can only contain letters, numbers, and underscores."
+    ),
   label: z.string().min(2).max(256),
   description: z.string().max(512).optional(),
   type: z.enum(fields.type.enumValues),
@@ -80,6 +64,7 @@ export const EditFieldForm = ({
     resolver: zodResolver(formSchema),
     defaultValues: {
       id: fieldData?.id || undefined,
+      name: fieldData?.name || "",
       label: fieldData?.label || "",
       description: fieldData?.description || "",
       placeholder: fieldData?.placeholder || "",
@@ -87,7 +72,7 @@ export const EditFieldForm = ({
       type: fieldData?.type || undefined,
       minlength: fieldData?.minlength || undefined,
       maxlength: fieldData?.maxlength || undefined,
-      disableOnEdit:fieldData?.disableOnEdit || false,
+      disableOnEdit: fieldData?.disableOnEdit || false,
       formId: fieldData?.formId || formId,
       options: fieldData?.options?.length ? fieldData.options.split(",") : [],
     },
@@ -117,6 +102,20 @@ export const EditFieldForm = ({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Name</FormLabel>
+              <FormControl>
+                <Input placeholder="Name" {...field} />
+              </FormControl>
+              <FormDescription>The fields name.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="label"
